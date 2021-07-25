@@ -31,7 +31,14 @@ router.post('/', checkPotluckNameExists, async (req, res, next) => {
 })
 
 router.put('/:id', async (req, res, next) => {
-    Potlucks.update(1)
+    try {
+        const { id } = req.params
+        const changes = req.body
+        const updatedPotluck = await Potlucks.update(id, changes)
+        res.status(200).json(updatedPotluck)
+    } catch(err) {
+        next(err)
+    }
 })
 
 router.delete('/:id', async (req, res, next) => {

@@ -209,8 +209,10 @@ const findByPotluckName = async(potluckName) => {
     return db('potlucks').where('potluck_name', potluckName)
 }
 
-const update = async (potluck) => {
-    console.log('update wired')
+const update = async (id, potluck) => {
+    const [updatedId] = await db('potlucks').where('potluck_id', id).update(potluck, '*')
+    
+    return await getById(updatedId.potluck_id)
 }
 
 const remove = async (potluck) => {
