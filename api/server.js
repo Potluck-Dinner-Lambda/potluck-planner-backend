@@ -21,6 +21,13 @@ server.use(cors())
 
 server.use('/api/auth', authRouter)
 
+server.use((err, req, res, next) => {
+  res.status(err.status || 500).json({
+    message: err.message,
+    stack: err.stack
+  })
+})
+
 server.get('/api/users', async (req, res) => {
   res.json(await getAllUsers())
 })
