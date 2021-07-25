@@ -5,6 +5,12 @@ const add = async user => {
     return newUserObject
 }
 
+const findByUsername = async username => {
+    const [user] = await db('users').where('username', username)
+    return user
+}
+
 module.exports = {
-    add
+    add,
+    findByUsername
 }
