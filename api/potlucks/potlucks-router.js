@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const Potlucks = require('./potlucks-model')
+const { checkPotluckNameExists } = require('./potlucks-middleware')
 
 router.get('/', async (req, res, next) => {
     try{
@@ -20,7 +21,7 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', checkPotluckNameExists, async (req, res, next) => {
     try {
         const newPotluck = await Potlucks.create(req.body)
         res.status(201).json(newPotluck)

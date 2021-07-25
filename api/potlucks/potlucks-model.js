@@ -205,6 +205,10 @@ const create = async (potluck) => {
     return filteredPotluckInfo
 }
 
+const findByPotluckName = async(potluckName) => {
+    return db('potlucks').where('potluck_name', potluckName)
+}
+
 const update = async (potluck) => {
     console.log('update wired')
 }
@@ -218,5 +222,6 @@ module.exports = {
     getById,
     create,
     update,
-    remove
+    remove,
+    findByPotluckName
 }
