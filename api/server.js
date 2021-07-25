@@ -3,6 +3,7 @@ const helmet = require('helmet')
 const cors = require('cors')
 const db = require('./data/db-config')
 const authRouter = require('./auth/auth-router')
+const potlucksRouter = require('./potlucks/potlucks-router')
 
 function getAllUsers() { return db('users') }
 
@@ -20,6 +21,7 @@ server.use(helmet())
 server.use(cors())
 
 server.use('/api/auth', authRouter)
+server.use('/api/potlucks', potlucksRouter)
 
 server.use((err, req, res, next) => {
   res.status(err.status || 500).json({
