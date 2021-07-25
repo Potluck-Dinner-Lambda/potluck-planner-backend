@@ -1,11 +1,13 @@
 const db = require('../data/db-config')
 
 const getPotlucks = async () => {
-    console.log('getPotlucls wired')
+    const potlucks = await db('potlucks')
+    return potlucks
 }
 
 const getById = async (id) => {
-    console.log('getById wired')
+    const [potluck] = await db('potlucks')
+    return potluck
 }
 
 const create = async (potluck) => {

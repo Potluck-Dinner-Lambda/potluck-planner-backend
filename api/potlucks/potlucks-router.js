@@ -2,11 +2,22 @@ const router = require('express').Router()
 const Potlucks = require('./potlucks-model')
 
 router.get('/', async (req, res, next) => {
-    Potlucks.getPotlucks()
+    try{
+        const potlucks = await Potlucks.getPotlucks()
+        res.status(200).json(potlucks)
+    } catch(err) {
+        next(err)
+    }
 })
 
 router.get('/:id', async (req, res, next) => {
-    Potlucks.getById(1)
+    try{
+        const { id } = req.params
+        const potluck = await Potlucks.getById(id)
+        res.status(200).json(potluck)
+    } catch(err) {
+        next(err)
+    }
 })
 
 router.post('/', async (req, res, next) => {
