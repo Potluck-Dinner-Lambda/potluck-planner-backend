@@ -174,7 +174,35 @@ const getById = async (id) => {
 }
 
 const create = async (potluck) => {
-    console.log('create wired')
+    const [id] = await db('potlucks').insert(potluck, ['potluck_id'])
+    console.log(id.potluck_id)
+    const unformattedPotlucks = await db
+    .select(
+        'p.potluck_id', 
+        'p.potluck_name', 
+        'p.potluck_date', 
+        'p.potluck_time', 
+        'p.potluck_location')
+    .from('potlucks as p')
+    .where('p.potluck_id', id.potluck_id)
+
+    const formatted = unformattedPotlucks.map(item => {
+        return {
+            'potluck_id': item.potluck_id,
+            'potluck_name': item.potluck_name,
+            'potluck_date': item.potluck_date,
+            'potluck_time': item.potluck_time,
+            'potluck_location': item.potluck_location
+        }
+    })
+
+    const filteredPotluckInfo = formatted.filter((potluck, index, self) => {
+        return index === self.findIndex((t) => (
+            t.potluck_id === potluck.potluck_id
+        ))
+    })
+    
+    return filteredPotluckInfo
 }
 
 const update = async (potluck) => {

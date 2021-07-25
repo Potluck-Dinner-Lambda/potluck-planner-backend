@@ -21,7 +21,12 @@ router.get('/:id', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-    Potlucks.create()
+    try {
+        const newPotluck = await Potlucks.create(req.body)
+        res.status(201).json(newPotluck)
+    } catch(err) {
+        next(err)
+    }
 })
 
 router.put('/:id', async (req, res, next) => {
