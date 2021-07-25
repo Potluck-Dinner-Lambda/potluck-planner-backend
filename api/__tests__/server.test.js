@@ -29,14 +29,14 @@ describe('[POST] /register', () => {
       username: 'kali',
       password: '1234'
     })
-    expect(await db('users')).toHaveLength(3)
+    expect(await db('users')).toHaveLength(4)
   })
   test('responds with [id, username, password] on successful register', async () => {
     const res = await request(server).post('/api/auth/register').send({
       username: 'kali',
       password: '1234'
     })
-    expect(res.body).toMatchObject({user_id: 3, username: 'kali', message: 'Welcome, kali'})
+    expect(res.body).toMatchObject({user_id: 4, username: 'kali', message: 'Welcome, kali'})
   })
   test('responds with [Please provide username and password] if password is missing', async () => {
     const res = await request(server).post('/api/auth/register').send({
