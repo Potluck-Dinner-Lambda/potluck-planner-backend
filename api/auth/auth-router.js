@@ -2,10 +2,10 @@ const bcrypt = require('bcryptjs')
 const router = require('express').Router()
 const tokenBuilder = require('./token-builder')
 const Auth = require('./auth-model')
-const { checkPayload, checkUserNameExists } = require('./auth.middlware')
+const { checkPayload, checkUserNameExistsRegister, checkUserNameExistsLogin } = require('./auth.middlware')
 
 
-router.post('/register', checkPayload, checkUserNameExists, async (req, res, next) => {
+router.post('/register', checkPayload, checkUserNameExistsRegister, async (req, res, next) => {
     const user = req.body
     const rounds = process.env.BCRYPT_ROUNDS || 8
     const hash = bcrypt.hashSync(user.password, rounds)
@@ -24,8 +24,20 @@ router.post('/register', checkPayload, checkUserNameExists, async (req, res, nex
    
 })
 
-router.post('/login', (req, res, next) => {
-    console.log('login wired')
+router.post('/login', checkPayload, checkUserNameExistsLogin, (req, res, next) => {
+    const { username, password } = req.body
+    if(bcrypt.compareSync(password, req.user.password)) {
+        const token = tokenBuilder(req.user)
+        res.status(200).json({
+            message: `welcome, ${username}`,
+            token
+        })
+    } else {
+        next({
+            status: 401,
+            message: 'invalid credentials'
+        })
+    }
 })
 
 module.exports = router

@@ -12,7 +12,7 @@ const checkPayload = (req, res, next) => {
     }
 }
 
-const checkUserNameExists = async (req, res, next) => {
+const checkUserNameExistsRegister = async (req, res, next) => {
     const { username } = req.body
     const exists = await Auth.findByUsername(username)
     if(exists) {
@@ -25,7 +25,22 @@ const checkUserNameExists = async (req, res, next) => {
     }
 }
 
+const checkUserNameExistsLogin = async (req, res, next) => {
+    const { username } = req.body
+    const user = await Auth.findByUsername(username)
+    if(user) {
+        req.user = user
+        next()
+    } else {
+        next({
+            status: 401,
+            message: 'invalid credentials'
+        })
+    }
+}
+
 module.exports = {
     checkPayload,
-    checkUserNameExists
+    checkUserNameExistsRegister,
+    checkUserNameExistsLogin
 }
