@@ -10,6 +10,7 @@ const getPotlucks = async () => {
             'p.potluck_location',
             'i.item_id',
             'i.item_name',
+            'i.user_id as itemUserId',
             'up.is_organizer',
             'up.is_going',
             'u.user_id',
@@ -36,13 +37,11 @@ const getPotlucks = async () => {
         ))
     })
 
-    console.log(filteredPotluckInfo)
-
     const items = unformattedPotlucks.map(item => {
         return {
             "item_id": item.item_id,
             "item_name": item.item_name,
-            "username": item.username,
+            "user_id": item.itemUserId,
             "potluck_id": item.potluck_id
         }
     })
@@ -50,13 +49,42 @@ const getPotlucks = async () => {
     const guests = unformattedPotlucks.map(item => {
         return {
             "username": item.username,
-            "potluck_id": item.potluck_id
+            "potluck_id": item.potluck_id,
+            "is_going": item.is_going,
+            "is_organizer": item.is_organizer
         }
     })
 
-    // console.log(formatted)
+    const formattedWithItemsAndGuests = filteredPotluckInfo.map(potluck => {
+        const potluckId = potluck.potluck_id
 
-    return potlucks
+        const unFilteredItems = items.filter(item => {
+            return item.potluck_id === potluckId
+        })
+
+        const filteredItems = unFilteredItems.filter((item, index, self) => {
+            return index === self.findIndex((t) => (
+                t.item_id === item.item_id
+            ))
+        })
+
+        const unFilteredGuests = guests.filter(guest => {
+            return guest.potluck_id === potluckId
+        })
+
+        const filteredGuests = unFilteredGuests.filter((guest, index, self) => {
+            return index === self.findIndex((t) => {
+               return t.username === guest.username && t.potluck_id === guest.potluck_id
+            })
+        })
+
+        return {
+            ...potluck,
+            "items": filteredItems,
+            "guests": filteredGuests
+        }
+    })
+    return formattedWithItemsAndGuests
 }
 
 const getById = async (id) => {
