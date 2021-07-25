@@ -22,3 +22,26 @@ describe('server.js', () => {
     expect(process.env.NODE_ENV).toBe('testing')
   })
 })
+
+describe('[POST] /register', () => {
+  test('creates new user in db', async () => {
+    await request(server).post('/api/auth/register').send({
+      username: 'kali',
+      password: '1234'
+    })
+    expect(await db('users')).toHaveLength(1)
+  })
+  test('responds with [id, username, password] on successful register', async () => {
+    const res = await request(server).post('/api/auth/register').send({
+      username: 'kali',
+      password: '1234'
+    })
+    expect(res.body).toMatchObject({user_id: 1, username: 'kali', message: 'Welcome, kali'})
+  })
+  test('responds with [Please provide username and password] if password is missing', async () => {
+    const res = await request(server).post('/api/auth/register').send({
+      username: 'kali'
+    })
+    expect(res.body.message).toBe('Please provide username and password')
+  })
+})

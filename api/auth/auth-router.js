@@ -14,7 +14,9 @@ router.post('/register', checkPayload, checkUserNameExists, async (req, res, nex
     try{
        const newUser = await Auth.add(user)
        res.status(201).json({
-           message: `Welcome, ${newUser.username}`
+           message: `Welcome, ${newUser.username}`,
+           user_id: newUser.user_id,
+           username: newUser.username,
        })
     } catch(err) {
         next(err)
