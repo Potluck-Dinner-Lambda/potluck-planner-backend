@@ -45,3 +45,35 @@ describe('[POST] /register', () => {
     expect(res.body.message).toBe('Please provide username and password')
   })
 })
+
+describe('[POST] /login', () => {
+  test('responds with {message: welcome, [username], token} on successful login', async () => {
+    await request(server).post('/api/auth/register').send({
+      username: 'kali',
+      password: '1234'
+    }) 
+    const res = await request(server).post('/api/auth/login').send({
+      username: 'kali',
+      password: '1234'
+    })
+    expect(res.body.message).toBe('welcome, kali') 
+    expect(res.body.token).toBeTruthy()
+  })
+  test('responds with [invalid credentials] message if incorrect username', async () => {
+    await request(server).post('/api/auth/register').send({
+      username: 'kali',
+      password: '1234'
+    }) 
+    const res = await request(server).post('/api/auth/login').send({
+      username: 'kal',
+      password: '1234'
+    })
+    expect(res.body.message).toBe('invalid credentials')
+  })
+  test('responds with [username and password required] message if password is missing', async () => {
+    const res = await request(server).post('/api/auth/login').send({
+      username: 'kali'
+    })
+    expect(res.body.message).toBe('Please provide username and password')
+  })
+})
