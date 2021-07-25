@@ -6,7 +6,7 @@ const getPotlucks = async () => {
 }
 
 const getById = async (id) => {
-    const [potluck] = await db('potlucks')
+    const [potluck] = await db('potlucks').where('potluck_id', id)
     return potluck
 }
 
