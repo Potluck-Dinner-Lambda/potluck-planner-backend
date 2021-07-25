@@ -29,14 +29,14 @@ describe('[POST] /register', () => {
       username: 'kali',
       password: '1234'
     })
-    expect(await db('users')).toHaveLength(1)
+    expect(await db('users')).toHaveLength(3)
   })
   test('responds with [id, username, password] on successful register', async () => {
     const res = await request(server).post('/api/auth/register').send({
       username: 'kali',
       password: '1234'
     })
-    expect(res.body).toMatchObject({user_id: 1, username: 'kali', message: 'Welcome, kali'})
+    expect(res.body).toMatchObject({user_id: 3, username: 'kali', message: 'Welcome, kali'})
   })
   test('responds with [Please provide username and password] if password is missing', async () => {
     const res = await request(server).post('/api/auth/register').send({
@@ -48,15 +48,11 @@ describe('[POST] /register', () => {
 
 describe('[POST] /login', () => {
   test('responds with {message: welcome, [username], token} on successful login', async () => {
-    await request(server).post('/api/auth/register').send({
-      username: 'kali',
-      password: '1234'
-    }) 
     const res = await request(server).post('/api/auth/login').send({
-      username: 'kali',
+      username: 'Afie',
       password: '1234'
     })
-    expect(res.body.message).toBe('welcome, kali') 
+    expect(res.body.message).toBe('welcome, Afie') 
     expect(res.body.token).toBeTruthy()
   })
   test('responds with [invalid credentials] message if incorrect username', async () => {
