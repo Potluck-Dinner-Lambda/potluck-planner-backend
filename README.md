@@ -77,18 +77,13 @@ The following tutorial explains how to set up this project using PostgreSQL and 
 | POST   | /api/users/enrollment     | -The classID of the class<br>the currently logged in user<br>wants to enroll in | -Valid Token | Success/Error message                                 |
 | DELETE | /api/users/enrollment/:id | N/A                                                                             | -Valid Token | Success/Error message                                 |
 ---
-# Items End-Points
+## Items End-Points
 | Classes | URL                          | Requires                                 | Restrictions                            | Returns                                                         |
 |---------|------------------------------|------------------------------------------|-----------------------------------------|-----------------------------------------------------------------|
 | POST    | /api/potlucks/:id/items      | { item_name: string }                    | -Valid Token and<br>is_organizer (creator) of potluck| item_id and item_name                              |
 | PUT     | /api/potlucks/items/:itemId  | updated key value pair (ex. { item_name: string}<br>or { selectItem: true } to have user select item to bring)| -Valid Token | updated item          |
-| GET     | /api/classes/:id/students    | N/A                                                                                                              | -Valid Token                                                                          | Object array of the currently<br>enrolled students in the class |
-| GET     | /api/classes/:id/instructors | N/A                                                                                                              | -Valid Token                                                                          | Object array of the instructor(s)<br>for the class              |
-| POST    | /api/classes/                | -name<br>-type<br>-time<br>-duration<br>-intensityLvl<br>-location<br>-attendees (integer)<br>-maxSize (integer) | -Valid Token<br>-Can only be used<br>when currently<br>logged in as an<br>instructor  | Single object of newly created<br>class                         |
-| PUT     | /api/classes/:id             | -Appropriate keys <br>with changed values                                                                        | -Valid Token<br>-Can only be used<br>when currently<br>logged in as an<br>instructor  | Single object of updated class<br>data                          |
-| DELETE  | /api/classes/:id             | N/A                                                                                                              | -Valid Token<br>-Can only be used<br>when currently <br>logged in as an<br>instructor | The deleted class                                               |
 
-# Guests End-Points
+## Guests End-Points
 | Classes | URL                          | Requires                                 | Restrictions                            | Returns                                                         |
 |---------|------------------------------|------------------------------------------|-----------------------------------------|-----------------------------------------------------------------|
 | POST    | /api/potlucks/:id/guests     | { username: string }                     | -Valid Token and<br>is_organizer (creator) of potluck<br> and username exists in database | success message |
