@@ -6,7 +6,7 @@ const Guests = require('./guests-model')
 const { restricted } = require('../auth/auth-middlware')
 const { checkIfUserExists, checkIfUserInvited } = require('./guests-middleware')
 
-router.get('/', async (req, res, next) => {
+router.get('/', restricted, async (req, res, next) => {
     try{
         const potlucks = await Potlucks.getPotlucks()
         res.status(200).json(potlucks)
@@ -15,7 +15,7 @@ router.get('/', async (req, res, next) => {
     }
 })
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', restricted, async (req, res, next) => {
     try{
         const { id } = req.params
         const potluck = await Potlucks.getById(id)
@@ -45,7 +45,7 @@ router.put('/:id', restricted, checkIfOrganizer, async (req, res, next) => {
     }
 })
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', restricted, async (req, res, next) => {
     try{
         const { id } = req.params
         const potluckToDelete = await Potlucks.getPotluckGeneralInfo(id)
@@ -63,7 +63,7 @@ router.delete('/:id', async (req, res, next) => {
     }
 })
 
-router.post('/:id/items', async (req, res, next) => {
+router.post('/:id/items', restricted, async (req, res, next) => {
     const { id } = req.params
     const item = req.body
     try{
@@ -87,7 +87,7 @@ router.put('/items/:itemId', restricted, async (req, res, next) => {
     }
 })
 
-router.post('/:id/guests', checkIfUserExists, async (req, res, next) => {
+router.post('/:id/guests', restricted, checkIfUserExists, async (req, res, next) => {
     try{
         const { id } = req.params
         const added = await Guests.addGuest(id, req.userId)
