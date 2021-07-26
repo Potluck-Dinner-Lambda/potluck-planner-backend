@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs')
 const router = require('express').Router()
 const tokenBuilder = require('./token-builder')
 const Auth = require('./auth-model')
-const { checkPayload, checkUserNameExistsRegister, checkUserNameExistsLogin } = require('./auth.middlware')
+const { checkPayload, checkUserNameExistsRegister, checkUserNameExistsLogin } = require('./auth-middlware')
 
 
 router.post('/register', checkPayload, checkUserNameExistsRegister, async (req, res, next) => {

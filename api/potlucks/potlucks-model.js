@@ -173,9 +173,9 @@ const getById = async (id) => {
     return formattedWithItemsAndGuests
 }
 
-const create = async (potluck) => {
+const create = async (potluck, token) => {
     const [id] = await db('potlucks').insert(potluck, ['potluck_id'])
-    console.log(id.potluck_id)
+
     const unformattedPotlucks = await db
     .select(
         'p.potluck_id', 
@@ -196,12 +196,21 @@ const create = async (potluck) => {
         }
     })
 
-    const filteredPotluckInfo = formatted.filter((potluck, index, self) => {
+    const [filteredPotluckInfo] = formatted.filter((potluck, index, self) => {
         return index === self.findIndex((t) => (
             t.potluck_id === potluck.potluck_id
         ))
     })
-    
+
+    await db('users_potlucks').insert({
+        user_id: token.subject,
+        potluck_id: filteredPotluckInfo.potluck_id,
+        is_organizer: true,
+        is_going: true
+     })
+
+     console.log(filteredPotluckInfo.potluck_id)
+
     return filteredPotluckInfo
 }
 

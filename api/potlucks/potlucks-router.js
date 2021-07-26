@@ -2,6 +2,9 @@ const router = require('express').Router()
 const Potlucks = require('./potlucks-model')
 const { checkPotluckNameExists } = require('./potlucks-middleware')
 const Items = require('./items-model')
+const Guests = require('./guests-model')
+const { restricted } = require('../auth/auth-middlware')
+const { checkIfUserExists } = require('./guests-middleware')
 
 router.get('/', async (req, res, next) => {
     try{
@@ -22,9 +25,9 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
-router.post('/', checkPotluckNameExists, async (req, res, next) => {
+router.post('/', checkPotluckNameExists, restricted, async (req, res, next) => {
     try {
-        const newPotluck = await Potlucks.create(req.body)
+        const newPotluck = await Potlucks.create(req.body, req.decodedJwt)
         res.status(201).json(newPotluck)
     } catch(err) {
         next(err)
@@ -71,12 +74,25 @@ router.post('/:id/items', async (req, res, next) => {
     }
 })
 
-router.put('/items/:itemId', async (req, res, next) => {
+// router.put('/items/:itemId', async (req, res, next) => {
+//     const { id } = req.params
+//     const changes = req.body
+//     try{
+//         const updatedItem = await Items.editItem(id, changes)
+//         res.status(201).json(updatedItem)
+//     } catch(err) {
+//         next(err)
+//     }
+// })
 
-})
-
-router.post('/:id/guests', async (req, res, next) => {
-
+router.post('/:id/guests', checkIfUserExists, async (req, res, next) => {
+    try{
+        const { id } = req.params
+        const added = await Guests.addGuest(id, req.userId)
+        res.status(200).json({message: 'guest added'})
+    } catch(err) {
+        next(err)
+    }
 })
 
 router.put('/:id/guests', async (req, res, next) => {
