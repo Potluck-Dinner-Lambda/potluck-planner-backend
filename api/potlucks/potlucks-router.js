@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const Potlucks = require('./potlucks-model')
-const { checkPotluckNameExists } = require('./potlucks-middleware')
+const { checkPotluckNameExists, checkIfOrganizer } = require('./potlucks-middleware')
 const Items = require('./items-model')
 const Guests = require('./guests-model')
 const { restricted } = require('../auth/auth-middlware')
@@ -34,7 +34,7 @@ router.post('/', checkPotluckNameExists, restricted, async (req, res, next) => {
     }
 })
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', restricted, checkIfOrganizer, async (req, res, next) => {
     try {
         const { id } = req.params
         const changes = req.body
