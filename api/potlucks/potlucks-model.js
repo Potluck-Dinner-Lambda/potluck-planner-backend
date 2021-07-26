@@ -141,7 +141,7 @@ const getById = async (id) => {
         }
     })
 
-    const formattedWithItemsAndGuests = filteredPotluckInfo.map(potluck => {
+    const [formattedWithItemsAndGuests] = filteredPotluckInfo.map(potluck => {
         const potluckId = potluck.potluck_id
 
         const unFilteredItems = items.filter(item => {

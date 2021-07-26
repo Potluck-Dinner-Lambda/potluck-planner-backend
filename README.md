@@ -58,3 +58,32 @@ The following tutorial explains how to set up this project using PostgreSQL and 
 - If you want to edit a migration that has already been released but don't want to lose all the data, make a new migration instead. This is a more realistic flow for production apps: prod databases are never migrated down. We can migrate Heroku down freely only because there's no valuable data from customers in it. In this sense, Heroku is acting more like a staging environment than production.
 
 - If your fronted devs are interested in running the API locally, help them set up PostgreSQL & pgAdmin in their machines, and teach them how to run migrations in their local. This empowers them to (1) help you troubleshoot bugs, (2) obtain the latest code by simply doing `git pull` and (3) work with their own data, without it being wiped every time you roll back the Heroku db. Collaboration is more fun and direct, and you don't need to deploy as often.
+
+
+## Base Url: https://ft-potluck-planner-backend.herokuapp.com/
+| AUTH | URL                | Requires                                  | Restrictions | Returns                                                 |
+|------|--------------------|-------------------------------------------|--------------|---------------------------------------------------------|
+| POST | /api/auth/register | -username<br>-password                    | None         | Newly created user with <br>auto-generated userId       |
+| POST | /api/auth/login    | -username<br>-password                    | None         | Welcome message and <br>JWT token for authorization     |
+---
+## User End-Points
+| Users  | URL                       | Requires                                                                        | Restrictions | Returns                                               |
+|--------|---------------------------|---------------------------------------------------------------------------------|--------------|-------------------------------------------------------|
+| GET    | /api/potlucks/            | N/A                                                                             | -Valid Token | Object Array of all potlucks <br> including items and guests
+| GET    | /api/potlucks/:id         | N/A                                                                             | -Valid Token | Individual potluck object<br>including items and guests|
+| POST   | /api/potlucks/            | potluck_name: (string)<br> optional -<br> potluck_date: date,<br> potluck_time: time,<br> potluck_location: string| -Valid Token | Object array of a user's <br>enrolled classes         |
+| PUT    | /api/users/:id            | -Any of the<br><br>keys (ex. username)                                          | -Valid Token | Single object of updated user's<br>data               |
+| DELETE | /api/users/:id            | N/A                                                                             | -Valid Token | Deleted user                                          |
+| POST   | /api/users/enrollment     | -The classID of the class<br>the currently logged in user<br>wants to enroll in | -Valid Token | Success/Error message                                 |
+| DELETE | /api/users/enrollment/:id | N/A                                                                             | -Valid Token | Success/Error message                                 |
+---
+# Class End-Points
+| Classes | URL                          | Requires                                                                                                         | Restrictions                                                                          | Returns                                                         |
+|---------|------------------------------|------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|-----------------------------------------------------------------|
+| GET     | /api/classes/                | N/A                                                                                                              | -Valid Token                                                                          | Object Array of all Classes                                     |
+| GET     | /api/classes/:id             | N/A                                                                                                              | -Valid Token                                                                          | Individual class object                                         |
+| GET     | /api/classes/:id/students    | N/A                                                                                                              | -Valid Token                                                                          | Object array of the currently<br>enrolled students in the class |
+| GET     | /api/classes/:id/instructors | N/A                                                                                                              | -Valid Token                                                                          | Object array of the instructor(s)<br>for the class              |
+| POST    | /api/classes/                | -name<br>-type<br>-time<br>-duration<br>-intensityLvl<br>-location<br>-attendees (integer)<br>-maxSize (integer) | -Valid Token<br>-Can only be used<br>when currently<br>logged in as an<br>instructor  | Single object of newly created<br>class                         |
+| PUT     | /api/classes/:id             | -Appropriate keys <br>with changed values                                                                        | -Valid Token<br>-Can only be used<br>when currently<br>logged in as an<br>instructor  | Single object of updated class<br>data                          |
+| DELETE  | /api/classes/:id             | N/A                                                                                                              | -Valid Token<br>-Can only be used<br>when currently <br>logged in as an<br>instructor | The deleted class                                               |
