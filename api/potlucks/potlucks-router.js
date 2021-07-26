@@ -4,7 +4,7 @@ const { checkPotluckNameExists } = require('./potlucks-middleware')
 const Items = require('./items-model')
 const Guests = require('./guests-model')
 const { restricted } = require('../auth/auth-middlware')
-const { checkIfUserExists } = require('./guests-middleware')
+const { checkIfUserExists, checkIfUserInvited } = require('./guests-middleware')
 
 router.get('/', async (req, res, next) => {
     try{
@@ -95,8 +95,14 @@ router.post('/:id/guests', checkIfUserExists, async (req, res, next) => {
     }
 })
 
-router.put('/:id/guests', async (req, res, next) => {
-
+router.put('/:id/guests', checkIfUserExists,  checkIfUserInvited, async (req, res, next) => {
+    try{
+        const { id } = req.params
+        const user = await Guests.rsvp(id, req.userId)
+        res.status(200).json({message: 'successfully rsvp-ed'})
+    } catch(err) {
+        next(err)
+    }
 })
 
 module.exports = router

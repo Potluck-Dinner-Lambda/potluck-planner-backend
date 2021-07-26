@@ -19,6 +19,24 @@ const checkIfUserExists = async (req, res, next) => {
     }
 }
 
+const checkIfUserInvited = async (req, res, next) => {
+    try{
+        const invited = await Guests.getInvited(req.params.id, req.userId)
+        if(invited) {
+            next()
+        }
+        else {
+            next({
+                status: 404,
+                message: 'user not invited'
+            })
+        }
+    } catch(err) {
+        next(err)
+    }
+}
+
 module.exports = {
-    checkIfUserExists
+    checkIfUserExists,
+    checkIfUserInvited
 }

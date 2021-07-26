@@ -12,7 +12,24 @@ const getByUsername = async (username) => {
     return user
 }
 
+const getInvited = async (potluckId, userId) => {
+    const [user] = await db('users_potlucks').where({
+        'user_id': userId, 
+        'potluck_id': potluckId
+    })
+    return user
+}
+
+const rsvp = async (potluckId, userId) => {
+    await db('users_potlucks').update({is_going: true}).where({
+        'user_id': userId, 
+        'potluck_id': potluckId
+    })
+}
+
 module.exports = {
     addGuest,
-    getByUsername
+    getByUsername,
+    rsvp,
+    getInvited
 }
