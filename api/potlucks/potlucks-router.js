@@ -78,6 +78,7 @@ router.put('/items/:itemId', restricted, async (req, res, next) => {
     const itemId = req.params.itemId
     const changes = req.body
     const userId = req.decodedJwt.subject
+    console.log(req.decodedJwt.subject)
     try{
         const updatedItem = await Items.editItem(itemId, changes, userId)
         res.status(201).json(updatedItem)
