@@ -82,7 +82,7 @@ The following tutorial explains how to set up this project using PostgreSQL and 
 | PUT     | /api/potlucks/items/:itemId  | updated key value pair (ex. { item_name: string}<br>or { selectItem: true } to have user select item to bring)| -Valid Token | updated item          |
 
 ## Guests End-Points
-| Classes | URL                          | Requires                                   | Restrictions                              | Returns                                                       |
-|---------|------------------------------|--------------------------------------------|-----------------------------------------|---------------------------------------------------------------|
+| Classes | URL                          | Requires                                           | Restrictions                        | Returns                                                     |
+|---------|------------------------------|----------------------------------------------------|-------------------------------------|-------------------------------------------------------------|
 | POST    | /api/potlucks/:id/guests     | { username: string }                       | -Valid Token and<br>is_organizer (creator) of potluck<br> and username exists in database | success message |
 | PUT     | /api/potlucks/:id/guests     | N/A                                        | -Valid Token                            | success message (changes is_going key to true for user)         |
