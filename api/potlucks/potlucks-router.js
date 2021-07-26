@@ -35,9 +35,9 @@ router.post('/', checkPotluckNameExists, restricted, async (req, res, next) => {
 })
 
 router.put('/:id', restricted, checkIfOrganizer, async (req, res, next) => {
+    const { id } = req.params
+    const changes = req.body
     try {
-        const { id } = req.params
-        const changes = req.body
         const updatedPotluck = await Potlucks.update(id, changes)
         res.status(200).json(updatedPotluck)
     } catch(err) {
@@ -74,16 +74,17 @@ router.post('/:id/items', async (req, res, next) => {
     }
 })
 
-// router.put('/items/:itemId', async (req, res, next) => {
-//     const { id } = req.params
-//     const changes = req.body
-//     try{
-//         const updatedItem = await Items.editItem(id, changes)
-//         res.status(201).json(updatedItem)
-//     } catch(err) {
-//         next(err)
-//     }
-// })
+router.put('/items/:itemId', restricted, async (req, res, next) => {
+    const itemId = req.params.itemId
+    const changes = req.body
+    const userId = req.decodedJwt.subject
+    try{
+        const updatedItem = await Items.editItem(itemId, changes, userId)
+        res.status(201).json(updatedItem)
+    } catch(err) {
+        next(err)
+    }
+})
 
 router.post('/:id/guests', checkIfUserExists, async (req, res, next) => {
     try{
@@ -95,7 +96,7 @@ router.post('/:id/guests', checkIfUserExists, async (req, res, next) => {
     }
 })
 
-router.put('/:id/guests', restricted, checkIfUserExists,  checkIfUserInvited, async (req, res, next) => {
+router.put('/:id/guests', restricted, checkIfUserExists, checkIfUserInvited, async (req, res, next) => {
     try{
         const { id } = req.params
         const user = await Guests.rsvp(id, req.userId)
