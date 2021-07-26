@@ -74,9 +74,7 @@ The following tutorial explains how to set up this project using PostgreSQL and 
 | POST   | /api/potlucks/            | { potluck_name: string }<br> optional -<br> potluck_date: date,<br> potluck_time: time,<br> potluck_location: string| -Valid Token | Object of newly<br>created potluck|
 | PUT    | /api/potlucks/:id         | -Any of the<br><br>keys (ex. potluck_name)                                      | -Valid Token | Single object of updated potluck<br>including items and guests|
 | DELETE | /api/potlucks/:id         | N/A                                                                             | -Valid Token | Deleted potluck                                       |
-| POST   | /api/users/enrollment     | -The classID of the class<br>the currently logged in user<br>wants to enroll in | -Valid Token | Success/Error message                                 |
-| DELETE | /api/users/enrollment/:id | N/A                                                                             | -Valid Token | Success/Error message                                 |
----
+
 ## Items End-Points
 | Classes | URL                          | Requires                                 | Restrictions                            | Returns                                                         |
 |---------|------------------------------|------------------------------------------|-----------------------------------------|-----------------------------------------------------------------|
