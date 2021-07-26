@@ -7,10 +7,9 @@ const addItem = async (potluckId, item) => {
 }
 
 const editItem = async (itemId, changes, userId) => {
-    console.log(changes.select_item, changes.item_name)
     if(changes.select_item && changes.select_item === true && changes.item_name) {
         return await db('items').returning(['item_id', 'item_name', 'user_id']).update({user_id: userId, item_name: changes.item_name}).where('item_id', itemId)
-    } else if(changes.select_item === true && !changes.item_name){
+    } else if(changes.select_item && changes.select_item === true && !changes.item_name){
         return await db('items').returning(['item_id', 'item_name', 'user_id']).update({user_id: userId}).where('item_id', itemId)
     } else{
         return await db('items').returning(['item_id', 'item_name', 'user_id']).update({item_name: changes.item_name}).where('item_id', itemId)

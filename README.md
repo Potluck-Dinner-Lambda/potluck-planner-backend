@@ -79,7 +79,7 @@ The following tutorial explains how to set up this project using PostgreSQL and 
 | Classes | URL                          | Requires                                 | Restrictions                            | Returns                                                         |
 |---------|------------------------------|------------------------------------------|-----------------------------------------|-----------------------------------------------------------------|
 | POST    | /api/potlucks/:id/items      | { item_name: string }                    | -Valid Token and<br>is_organizer (creator) of potluck| item_id and item_name                              |
-| PUT     | /api/potlucks/items/:itemId  | updated key value pair (ex. { item_name: string}<br>or { selectItem: true } to have user select item to bring)| -Valid Token | updated item (if user_id is not null, item is taken) |
+| PUT     | /api/potlucks/items/:itemId  | updated key value pair (ex. { item_name: string}<br>or { select_item: true } to have user select item to bring)| -Valid Token | updated item (if user_id is not null, item is taken) |
 
 ## Guests End-Points
 | Classes | URL                          | Requires                                           | Restrictions                        | Returns                                                     |
