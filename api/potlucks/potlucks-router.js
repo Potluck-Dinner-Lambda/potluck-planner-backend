@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const Potlucks = require('./potlucks-model')
 const { checkPotluckNameExists } = require('./potlucks-middleware')
+const Items = require('./items-model')
 
 router.get('/', async (req, res, next) => {
     try{
@@ -51,7 +52,7 @@ router.delete('/:id', async (req, res, next) => {
             res.status(200).json(potluckToDelete)
         } else {
             res.status(500).json({
-                message: 'error deleting potluck'
+                message: 'potluck could not be found'
             })
         }
     } catch(err) {
@@ -60,7 +61,14 @@ router.delete('/:id', async (req, res, next) => {
 })
 
 router.post('/:id/items', async (req, res, next) => {
-
+    const { id } = req.params
+    const item = req.body
+    try{
+        const newItem = await Items.addItem(id, item)
+        res.status(201).json(newItem)
+    } catch(err) {
+        next(err)
+    }
 })
 
 router.put('/items/:itemId', async (req, res, next) => {
