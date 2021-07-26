@@ -215,8 +215,39 @@ const update = async (id, potluck) => {
     return await getById(updatedId.potluck_id)
 }
 
-const remove = async (potluck) => {
-    console.log('remove wired')
+const remove = async (id) => {
+    const count = await db('potlucks').where('potluck_id', id).del()
+    return count      
+    }
+
+const getPotluckGeneralInfo = async (id) => {
+    const unformattedPotlucks = await db
+    .select(
+        'p.potluck_id', 
+        'p.potluck_name', 
+        'p.potluck_date', 
+        'p.potluck_time', 
+        'p.potluck_location')
+    .from('potlucks as p')
+    .where('p.potluck_id', id)
+
+    const formatted = unformattedPotlucks.map(item => {
+        return {
+            'potluck_id': item.potluck_id,
+            'potluck_name': item.potluck_name,
+            'potluck_date': item.potluck_date,
+            'potluck_time': item.potluck_time,
+            'potluck_location': item.potluck_location
+        }
+    })
+
+    const [filteredPotluckInfo] = formatted.filter((potluck, index, self) => {
+        return index === self.findIndex((t) => (
+            t.potluck_id === potluck.potluck_id
+        ))
+    })
+    
+    return filteredPotluckInfo
 }
 
 module.exports = {
@@ -225,5 +256,6 @@ module.exports = {
     create,
     update,
     remove,
-    findByPotluckName
+    findByPotluckName,
+    getPotluckGeneralInfo
 }

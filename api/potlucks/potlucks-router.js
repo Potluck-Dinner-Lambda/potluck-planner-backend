@@ -42,7 +42,21 @@ router.put('/:id', async (req, res, next) => {
 })
 
 router.delete('/:id', async (req, res, next) => {
-    Potlucks.remove(1)
+    try{
+        const { id } = req.params
+        const potluckToDelete = await Potlucks.getPotluckGeneralInfo(id)
+        console.log(potluckToDelete)
+        const count = await Potlucks.remove(id)
+        if(count > 0) {
+            res.status(200).json(potluckToDelete)
+        } else {
+            res.status(500).json({
+                message: 'error deleting potluck'
+            })
+        }
+    } catch(err) {
+        next(err)
+    }
 })
 
 router.post('/:id/items', async (req, res, next) => {
