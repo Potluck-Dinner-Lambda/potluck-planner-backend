@@ -95,7 +95,7 @@ router.post('/:id/guests', checkIfUserExists, async (req, res, next) => {
     }
 })
 
-router.put('/:id/guests', checkIfUserExists,  checkIfUserInvited, async (req, res, next) => {
+router.put('/:id/guests', restricted, checkIfUserExists,  checkIfUserInvited, async (req, res, next) => {
     try{
         const { id } = req.params
         const user = await Guests.rsvp(id, req.userId)

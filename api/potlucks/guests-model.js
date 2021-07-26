@@ -7,8 +7,8 @@ const addGuest = async (potluckId, userId) => {
     })
 }
 
-const getByUsername = async (username) => {
-    const [user] = await db('users').where('username', username)
+const getByUserId = async (userId) => {
+    const [user] = await db('users').where('user_id', userId)
     return user
 }
 
@@ -29,7 +29,7 @@ const rsvp = async (potluckId, userId) => {
 
 module.exports = {
     addGuest,
-    getByUsername,
+    getByUserId,
     rsvp,
     getInvited
 }

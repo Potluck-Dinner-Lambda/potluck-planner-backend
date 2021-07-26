@@ -1,10 +1,9 @@
 const Guests = require('./guests-model')
 
 const checkIfUserExists = async (req, res, next) => {
-    console.log(req.body.username)
     try{
-        const user = await Guests.getByUsername(req.body.username)
-        console.log(user)
+        console.log(req.decodedJwt.user_id)
+        const user = await Guests.getByUserId(req.decodedJwt.subject)
         if(user){
             req.userId = user.user_id
             next()

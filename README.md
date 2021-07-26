@@ -66,24 +66,30 @@ The following tutorial explains how to set up this project using PostgreSQL and 
 | POST | /api/auth/register | -username<br>-password                    | None         | Newly created user with <br>auto-generated userId       |
 | POST | /api/auth/login    | -username<br>-password                    | None         | Welcome message and <br>JWT token for authorization     |
 ---
-## User End-Points
+## Potluck End-Points
 | Users  | URL                       | Requires                                                                        | Restrictions | Returns                                               |
 |--------|---------------------------|---------------------------------------------------------------------------------|--------------|-------------------------------------------------------|
 | GET    | /api/potlucks/            | N/A                                                                             | -Valid Token | Object Array of all potlucks <br> including items and guests
 | GET    | /api/potlucks/:id         | N/A                                                                             | -Valid Token | Individual potluck object<br>including items and guests|
-| POST   | /api/potlucks/            | potluck_name: (string)<br> optional -<br> potluck_date: date,<br> potluck_time: time,<br> potluck_location: string| -Valid Token | Object array of a user's <br>enrolled classes         |
-| PUT    | /api/users/:id            | -Any of the<br><br>keys (ex. username)                                          | -Valid Token | Single object of updated user's<br>data               |
-| DELETE | /api/users/:id            | N/A                                                                             | -Valid Token | Deleted user                                          |
+| POST   | /api/potlucks/            | { potluck_name: string }<br> optional -<br> potluck_date: date,<br> potluck_time: time,<br> potluck_location: string| -Valid Token | Object of newly<br>created potluck|
+| PUT    | /api/potlucks/:id         | -Any of the<br><br>keys (ex. potluck_name)                                      | -Valid Token | Single object of updated potluck<br>including items and guests|
+| DELETE | /api/potlucks/:id         | N/A                                                                             | -Valid Token | Deleted potluck                                       |
 | POST   | /api/users/enrollment     | -The classID of the class<br>the currently logged in user<br>wants to enroll in | -Valid Token | Success/Error message                                 |
 | DELETE | /api/users/enrollment/:id | N/A                                                                             | -Valid Token | Success/Error message                                 |
 ---
-# Class End-Points
-| Classes | URL                          | Requires                                                                                                         | Restrictions                                                                          | Returns                                                         |
-|---------|------------------------------|------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|-----------------------------------------------------------------|
-| GET     | /api/classes/                | N/A                                                                                                              | -Valid Token                                                                          | Object Array of all Classes                                     |
-| GET     | /api/classes/:id             | N/A                                                                                                              | -Valid Token                                                                          | Individual class object                                         |
+# Items End-Points
+| Classes | URL                          | Requires                                 | Restrictions                            | Returns                                                         |
+|---------|------------------------------|------------------------------------------|-----------------------------------------|-----------------------------------------------------------------|
+| POST    | /api/potlucks/:id/items      | { item_name: string }                    | -Valid Token and<br>is_organizer (creator) of potluck| item_id and item_name                              |
+| PUT     | /api/potlucks/items/:itemId  | updated key value pair (ex. { item_name: string}<br>or { selectItem: true } to have user select item to bring)| -Valid Token | updated item          |
 | GET     | /api/classes/:id/students    | N/A                                                                                                              | -Valid Token                                                                          | Object array of the currently<br>enrolled students in the class |
 | GET     | /api/classes/:id/instructors | N/A                                                                                                              | -Valid Token                                                                          | Object array of the instructor(s)<br>for the class              |
 | POST    | /api/classes/                | -name<br>-type<br>-time<br>-duration<br>-intensityLvl<br>-location<br>-attendees (integer)<br>-maxSize (integer) | -Valid Token<br>-Can only be used<br>when currently<br>logged in as an<br>instructor  | Single object of newly created<br>class                         |
 | PUT     | /api/classes/:id             | -Appropriate keys <br>with changed values                                                                        | -Valid Token<br>-Can only be used<br>when currently<br>logged in as an<br>instructor  | Single object of updated class<br>data                          |
 | DELETE  | /api/classes/:id             | N/A                                                                                                              | -Valid Token<br>-Can only be used<br>when currently <br>logged in as an<br>instructor | The deleted class                                               |
+
+# Guests End-Points
+| Classes | URL                          | Requires                                 | Restrictions                            | Returns                                                         |
+|---------|------------------------------|------------------------------------------|-----------------------------------------|-----------------------------------------------------------------|
+| POST    | /api/potlucks/:id/guests     | { username: string }                     | -Valid Token and<br>is_organizer (creator) of potluck<br> and username exists in database | success message |
+| PUT     | /api/potlucks/:id/guests     | N/A                                      | -Valid Token                            | success message                                                 |
