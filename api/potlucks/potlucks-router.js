@@ -3,7 +3,7 @@ const Potlucks = require('./potlucks-model')
 const { checkPotluckNameExists, checkIfOrganizer } = require('./potlucks-middleware')
 const Items = require('./items-model')
 const Guests = require('./guests-model')
-const { restricted } = require('../auth/auth-middlware')
+const { restricted } = require('../auth/auth-middleware')
 const { checkIfUserExists, checkIfUserInvited } = require('./guests-middleware')
 
 router.get('/', restricted, async (req, res, next) => {

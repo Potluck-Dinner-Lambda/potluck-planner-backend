@@ -201,16 +201,12 @@ const create = async (potluck, token) => {
             t.potluck_id === potluck.potluck_id
         ))
     })
-    console.log('this', token.subject)
-
     await db('users_potlucks').insert({
         user_id: token.subject,
         potluck_id: filteredPotluckInfo.potluck_id,
         is_organizer: true,
         is_going: true
      })
-
-     
 
     return filteredPotluckInfo
 }
