@@ -45,7 +45,7 @@ router.put('/:id', restricted, checkIfOrganizer, async (req, res, next) => {
     }
 })
 
-router.delete('/:id', restricted, async (req, res, next) => {
+router.delete('/:id', restricted, checkIfOrganizer, async (req, res, next) => {
     try{
         const { id } = req.params
         const potluckToDelete = await Potlucks.getPotluckGeneralInfo(id)
