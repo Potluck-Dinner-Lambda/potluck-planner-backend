@@ -1,8 +1,9 @@
 const db = require('../data/db-config')
 
-const addGuest = async (potluckId, userId) => {
+const addGuest = async (potluckId, username) => {
+    const [user] = await db('users').where('username', username)
     await db('users_potlucks').insert({
-        user_id: userId,
+        user_id: user.user_id,
         potluck_id: potluckId
     })
 }
