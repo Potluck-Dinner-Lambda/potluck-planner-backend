@@ -1,10 +1,20 @@
 const Potlucks = require('./potlucks-model')
 const Guests = require('./guests-model')
 
+const checkReqBody = async (req, res, next) => {
+    if (!req.body.potluck_name) {
+        res.status(422).json({
+            message: "Potluck name required"
+        })
+    } else {
+        next() 
+    }
+}
+
 const checkPotluckNameExists = async (req, res, next) => {
     const { potluck_name } = req.body
     const exists = await Potlucks.findByPotluckName(potluck_name)
-    if(exists && exists.length !== 0) {
+    if(exists) {
         res.status(422).json({
             message: 'Potluck name taken'
         })
@@ -23,6 +33,7 @@ const checkIfOrganizer = async (req, res, next) => {
 }
 
 module.exports = {
+    checkReqBody,
     checkPotluckNameExists,
     checkIfOrganizer
 }

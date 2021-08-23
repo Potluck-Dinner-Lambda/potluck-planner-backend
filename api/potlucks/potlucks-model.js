@@ -212,7 +212,12 @@ const create = async (potluck, token) => {
 }
 
 const findByPotluckName = async(potluckName) => {
-    return db('potlucks').where('potluck_name', potluckName)
+    const exists = db('potlucks').where('potluck_name', potluckName)
+    if (exists == potluckName){
+        return true
+    } else {
+        return false
+    }
 }
 
 const update = async (id, potluck) => {
