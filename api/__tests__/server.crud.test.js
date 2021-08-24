@@ -71,3 +71,21 @@ describe('[POST] /', () => {
         expect(res.body).toHaveLength(1)
       })
   })
+
+  describe('[POST] /:id/items', () => {
+      test('responds with new item on successful creation', async () => {
+          const res = await request(server).post(`/api/potlucks/1/items`).send({item_name: 'napkins'}).set('Authorization', token)
+          expect(res.body).toMatchObject({item_name: 'napkins'})
+      })
+  })
+
+  describe('[PUT] /items/:itemId', () => {
+      test('responds with updated item when changing item name', async () => {
+        const res = await request(server).put(`/api/potlucks/items/1`).send({item_name: 'plates'}).set('Authorization', token)
+        expect(res.body).toMatchObject({item_name: 'plates'})
+      })
+      test('responds with ', async () => {
+        const res = await request(server).put(`/api/potlucks/items/1`).send({select_item: true}).set('Authorization', token)
+        expect(res.body).toMatchObject({user_id: 2})
+      })
+  })

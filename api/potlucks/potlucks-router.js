@@ -5,6 +5,7 @@ const Items = require('./items-model')
 const Guests = require('./guests-model')
 const { restricted } = require('../auth/auth-middleware')
 const { checkIfUserExists, checkIfUserInvited } = require('./guests-middleware')
+const { checkReqBodyItems } = require('./items-middleware')
 
 router.get('/', restricted, async (req, res, next) => {
     try{
@@ -49,7 +50,6 @@ router.delete('/:id', restricted, checkIfOrganizer, async (req, res, next) => {
     try{
         const { id } = req.params
         const potluckToDelete = await Potlucks.getPotluckGeneralInfo(id)
-        console.log(potluckToDelete)
         const count = await Potlucks.remove(id)
         if(count > 0) {
             res.status(200).json(potluckToDelete)
@@ -63,7 +63,7 @@ router.delete('/:id', restricted, checkIfOrganizer, async (req, res, next) => {
     }
 })
 
-router.post('/:id/items', restricted, async (req, res, next) => {
+router.post('/:id/items', restricted, checkReqBodyItems, async (req, res, next) => {
     const { id } = req.params
     const item = req.body
     try{
@@ -78,7 +78,6 @@ router.put('/items/:itemId', restricted, async (req, res, next) => {
     const itemId = req.params.itemId
     const changes = req.body
     const userId = req.decodedJwt.subject
-    console.log(req.decodedJwt.subject)
     try{
         const updatedItem = await Items.editItem(itemId, changes, userId)
         res.status(201).json(updatedItem)
