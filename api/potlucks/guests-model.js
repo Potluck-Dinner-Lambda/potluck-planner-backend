@@ -13,6 +13,15 @@ const getByUserId = async (userId) => {
     return user
 }
 
+const getByUsername = async (username) => {
+    const [user] = await db('users').where('username', username)
+    if( user && user.username == username) {
+        return true
+    } else {
+        return false
+    }
+}
+
 const getInvited = async (potluckId, userId) => {
     const [user] = await db('users_potlucks').where({
         'user_id': userId, 
@@ -31,6 +40,7 @@ const rsvp = async (potluckId, userId) => {
 module.exports = {
     addGuest,
     getByUserId,
+    getByUsername,
     rsvp,
     getInvited
 }

@@ -75,7 +75,7 @@ router.post('/:id/items', restricted, checkReqBodyItems, async (req, res, next) 
 })
 
 router.put('/items/:itemId', restricted, async (req, res, next) => {
-    const itemId = req.params.itemId
+    const { itemId } = req.params
     const changes = req.body
     const userId = req.decodedJwt.subject
     try{
@@ -90,7 +90,7 @@ router.post('/:id/guests', restricted, checkIfUserExists, async (req, res, next)
     try{
         const { id } = req.params
         const { username } = req.body
-        const added = await Guests.addGuest(id, username)
+        await Guests.addGuest(id, username)
         res.status(200).json({message: 'guest added'})
     } catch(err) {
         next(err)

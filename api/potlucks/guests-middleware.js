@@ -2,10 +2,18 @@ const Guests = require('./guests-model')
 
 const checkIfUserExists = async (req, res, next) => {
     try{
-        const user = await Guests.getByUserId(req.decodedJwt.subject)
-        if(user){
-            req.userId = user.user_id
-            next()
+        const username = await Guests.getByUsername(req.body.username)
+        if(username) {
+            const user = await Guests.getByUserId(req.decodedJwt.subject)
+            if(user){
+                req.userId = user.user_id
+                next()
+            } else {
+                next({
+                    status: 404,
+                    message: 'user not found'
+                })
+            }
         } else {
             next({
                 status: 404,

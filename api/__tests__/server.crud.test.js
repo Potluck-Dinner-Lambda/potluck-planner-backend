@@ -27,6 +27,10 @@ it('sanity check', () => {
 })
 
 describe('[GET] /', () => {
+    test('responds with error message if user not logged in', async () => {
+        const res = await request(server).get('/api/potlucks')
+        expect(res.body.message).toBe("token required")
+    })
     test('responds with 2 potlucks', async () => {
       const res = await request(server).get('/api/potlucks').set('Authorization', token)
       expect(res.body).toHaveLength(2)
@@ -84,8 +88,19 @@ describe('[POST] /', () => {
         const res = await request(server).put(`/api/potlucks/items/1`).send({item_name: 'plates'}).set('Authorization', token)
         expect(res.body).toMatchObject({item_name: 'plates'})
       })
-      test('responds with ', async () => {
+      test('user_id is added to item record when user selects item', async () => {
         const res = await request(server).put(`/api/potlucks/items/1`).send({select_item: true}).set('Authorization', token)
         expect(res.body).toMatchObject({user_id: 2})
+      })
+  })
+
+  describe('[POST] /:id/guests', () => {
+      test('responds with success message when adding guest successful', async () => {
+        const res = await request(server).post(`/api/potlucks/1/guests`).send({username: 'Sandy'}).set('Authorization', token)
+        expect(res.body.message).toBe('guest added')
+      })
+      test('responds with error message when username of guest to add does not exist', async () => {
+        const res = await request(server).post(`/api/potlucks/1/guests`).send({username: 'Jane'}).set('Authorization', token)
+        expect(res.body.message).toBe('user not found')
       })
   })
