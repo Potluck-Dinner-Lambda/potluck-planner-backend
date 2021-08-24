@@ -55,3 +55,19 @@ describe('[POST] /', () => {
         expect(res.body).toMatchObject({potluck_name: "Updated Potluck"})
       })
   })
+
+  describe('[DELETE] /:id', () => {
+      test('responds with error message if not potluck organizer', async () => {
+        const res = await request(server).delete(`/api/potlucks/1`).send({potluck_name: "Updated Potluck"}).set('Authorization', token)
+        expect(res.body.message).toBe("only organizer has access")
+      })
+      test('responds with deleted potluck if successful', async () => {
+        const res = await request(server).delete(`/api/potlucks/2`).set('Authorization', token)
+        expect(res.body).toMatchObject({potluck_id: 2})
+      })
+      test('potluck is deleted from database when successful', async () => {
+        await request(server).delete(`/api/potlucks/2`).set('Authorization', token)
+        const res = await request(server).get(`/api/potlucks`).set('Authorization', token)
+        expect(res.body).toHaveLength(1)
+      })
+  })
