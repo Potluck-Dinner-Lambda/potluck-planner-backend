@@ -104,3 +104,10 @@ describe('[POST] /', () => {
         expect(res.body.message).toBe('user not found')
       })
   })
+
+  describe('[PUT] /:id/guests', () => {
+      test('responds with success message when guests successfully rsvps', async () => {
+        const res = await request(server).put(`/api/potlucks/2/guests`).set('Authorization', token)
+        expect(res.body.message).toBe('successfully rsvp-ed')
+      })
+  })

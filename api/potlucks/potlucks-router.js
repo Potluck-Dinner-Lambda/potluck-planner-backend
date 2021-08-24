@@ -4,7 +4,7 @@ const { checkReqBody, checkPotluckNameExists, checkIfOrganizer } = require('./po
 const Items = require('./items-model')
 const Guests = require('./guests-model')
 const { restricted } = require('../auth/auth-middleware')
-const { checkIfUserExists, checkIfUserInvited } = require('./guests-middleware')
+const { checkIfUserExists, checkIfUsernameExists, checkIfUserInvited } = require('./guests-middleware')
 const { checkReqBodyItems } = require('./items-middleware')
 
 router.get('/', restricted, async (req, res, next) => {
@@ -86,7 +86,7 @@ router.put('/items/:itemId', restricted, async (req, res, next) => {
     }
 })
 
-router.post('/:id/guests', restricted, checkIfUserExists, async (req, res, next) => {
+router.post('/:id/guests', restricted, checkIfUsernameExists, async (req, res, next) => {
     try{
         const { id } = req.params
         const { username } = req.body
@@ -100,7 +100,7 @@ router.post('/:id/guests', restricted, checkIfUserExists, async (req, res, next)
 router.put('/:id/guests', restricted, checkIfUserExists, checkIfUserInvited, async (req, res, next) => {
     try{
         const { id } = req.params
-        const user = await Guests.rsvp(id, req.userId)
+        await Guests.rsvp(id, req.userId)
         res.status(200).json({message: 'successfully rsvp-ed'})
     } catch(err) {
         next(err)

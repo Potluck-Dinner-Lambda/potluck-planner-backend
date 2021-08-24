@@ -2,8 +2,7 @@ const Guests = require('./guests-model')
 
 const checkIfUserExists = async (req, res, next) => {
     try{
-        const username = await Guests.getByUsername(req.body.username)
-        if(username) {
+
             const user = await Guests.getByUserId(req.decodedJwt.subject)
             if(user){
                 req.userId = user.user_id
@@ -14,6 +13,16 @@ const checkIfUserExists = async (req, res, next) => {
                     message: 'user not found'
                 })
             }
+    } catch(err) {
+        next(err)
+    }
+}
+
+const checkIfUsernameExists = async (req, res, next) => {
+    try {
+        const username = await Guests.getByUsername(req.body.username)
+        if(username){
+            next()
         } else {
             next({
                 status: 404,
@@ -44,5 +53,6 @@ const checkIfUserInvited = async (req, res, next) => {
 
 module.exports = {
     checkIfUserExists,
+    checkIfUsernameExists,
     checkIfUserInvited
 }
