@@ -25,7 +25,7 @@ router.get('/:id', restricted, async (req, res, next) => {
     }
 })
 
-router.post('/', checkReqBody, checkPotluckNameExists, restricted, async (req, res, next) => {
+router.post('/', restricted, checkReqBody, checkPotluckNameExists, restricted, async (req, res, next) => {
     try {
         const newPotluck = await Potlucks.create(req.body, req.decodedJwt)
         res.status(201).json(newPotluck)
