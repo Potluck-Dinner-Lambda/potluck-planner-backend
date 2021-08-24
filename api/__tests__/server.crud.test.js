@@ -94,6 +94,13 @@ describe('[POST] /', () => {
       })
   })
 
+  describe('[DELETE] /items/:itemId', () => {
+    test('responds with success message when item successfully deleted', async () => {
+        const res = await request(server).delete(`/api/potlucks/items/1`).set('Authorization', token)
+        expect(res.body.message).toBe('item successfully deleted')
+      })
+  })
+
   describe('[POST] /:id/guests', () => {
       test('responds with success message when adding guest successful', async () => {
         const res = await request(server).post(`/api/potlucks/1/guests`).send({username: 'Sandy'}).set('Authorization', token)
