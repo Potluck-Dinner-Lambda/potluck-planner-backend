@@ -28,7 +28,13 @@ const editItem = async (itemId, changes, userId) => {
     }
 }
 
+const deleteItem = async (itemId) => {
+    const count = await db('items').where('item_id', itemId).del()
+    return count
+}
+
 module.exports = {
     addItem,
-    editItem
+    editItem,
+    deleteItem
 }

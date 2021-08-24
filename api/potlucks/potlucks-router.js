@@ -78,9 +78,23 @@ router.put('/items/:itemId', restricted, async (req, res, next) => {
     const { itemId } = req.params
     const changes = req.body
     const userId = req.decodedJwt.subject
-    try{
+    try {
         const updatedItem = await Items.editItem(itemId, changes, userId)
         res.status(201).json(updatedItem)
+    } catch(err) {
+        next(err)
+    }
+})
+
+router.delete('/items/:itemId', restricted, async (req, res, next) => {
+    const { itemId } = req.params
+    try {
+        const count = await Items.deleteItem(itemId)
+        if(count > 0){
+            res.status(200).json({message: 'item successfully deleted'})
+        } else {
+            res.status(500).json({message: 'item not found'})
+        }
     } catch(err) {
         next(err)
     }
